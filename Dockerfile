@@ -7,6 +7,8 @@ RUN apt-get update && apt-get install -y libpng12-dev libjpeg-dev && rm -rf /var
 	&& docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr \
     && docker-php-ext-install gd mysqli opcache
 
+COPY php/opcache-recomended.ini /usr/local/etc/php/conf.d/
+
 ### WP-CLI
 RUN curl -SL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /usr/local/bin/wp-cli \
     && chmod +x /usr/local/bin/wp-cli
