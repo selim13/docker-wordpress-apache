@@ -4,7 +4,7 @@ Mount wordpress installation to the `/var/www/html`.
 
 ```console
 docker volume add wordpress-data
-docker run -v wordpress-data:/var/www/html --name wp selim13/wp-cli-php7 
+docker run -v wordpress-data:/var/www/html --name wp selim13/wordpress-apache
 ```
 
 To exec wp-cli:
