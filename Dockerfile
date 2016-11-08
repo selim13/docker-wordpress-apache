@@ -1,5 +1,7 @@
 FROM php:5.6-apache
 
+MAINTAINER Dmitry Seleznyov <selim013@gmail.com>
+
 RUN a2enmod rewrite expires
 
 # install the PHP extensions we need
@@ -9,6 +11,7 @@ RUN apt-get update && apt-get install -y msmtp libpng12-dev libjpeg-dev && rm -r
 
 COPY php/opcache-recomended.ini /usr/local/etc/php/conf.d/
 COPY php/msmtp.ini /usr/local/etc/php/conf.d/
+COPY php/upload.ini /usr/local/etc/php/conf.d/
 
 ### WP-CLI
 RUN curl -SL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar -o /usr/local/bin/wp-cli \
