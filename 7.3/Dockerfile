@@ -5,7 +5,7 @@ LABEL maintainer="selim013@gmail.com"
 RUN a2enmod rewrite expires
 
 # install the PHP extensions we need
-RUN apt-get update && apt-get install -y msmtp less mysql-client libpng-dev libjpeg-dev libmagickwand-dev libzip-dev \
+RUN apt-get update && apt-get install --no-install-recommends -y msmtp less mariadb-client libpng-dev libjpeg-dev libmagickwand-dev libzip-dev \
     && rm -rf /var/lib/apt/lists/* \
 	&& docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr \
     && docker-php-ext-install -j "$(nproc)" bcmath exif gd mysqli opcache zip
