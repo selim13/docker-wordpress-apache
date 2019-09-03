@@ -2,7 +2,7 @@ version: "2"
 
 volumes:
   db-data: {}
-  wp-php5.7-data: {}
+  wp-php7.3-data: {}
 
 services:
   db:
@@ -16,7 +16,7 @@ services:
   wp-apache-php7.3:
     build: ./7.3
     volumes:
-      - "wp-php5.7-data:/var/www/html"
+      - "wp-php7.3-data:/var/www/html"
     ports:
       - 80:80
     depends_on:
