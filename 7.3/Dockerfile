@@ -1,6 +1,6 @@
 FROM php:7.3-apache
 
-MAINTAINER Dmitry Seleznyov <selim013@gmail.com>
+LABEL maintainer="selim013@gmail.com"
 
 RUN a2enmod rewrite expires
 
@@ -16,6 +16,7 @@ RUN pecl install imagick-3.4.4 \
 COPY php/opcache-recomended.ini /usr/local/etc/php/conf.d/
 COPY php/msmtp.ini /usr/local/etc/php/conf.d/
 COPY php/upload.ini /usr/local/etc/php/conf.d/
+COPY apache2/000-default.conf /etc/apache2/sites-available/000-default.conf
 
 RUN mkdir -p /tmp/opcache \
     && chown -R www-data:www-data /tmp/opcache \
@@ -28,6 +29,8 @@ RUN curl -SL https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cl
 # Force wp-cli not to run less
 ENV PAGER=cat
 
-VOLUME /var/www/html
+# Apache defaults
+ENV APACHE_SERVER_ADMIN=webmaster@localhost \
+    APACHE_DOCUMENT_ROOT=/var/www/html
 
 CMD ["apache2-foreground"]

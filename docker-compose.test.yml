@@ -1,0 +1,26 @@
+version: "2"
+
+volumes:
+  db-data: {}
+  wp-php5.7-data: {}
+
+services:
+  db:
+    image: mysql:5.7
+    volumes:
+      - "db-data:/var/lib/mysql"
+    environment:
+      MYSQL_ROOT_PASSWORD: wordpress
+      MYSQL_DATABASE: wordpress
+      
+  wp-apache-php7.3:
+    build: ./7.3
+    volumes:
+      - "wp-php5.7-data:/var/www/html"
+    ports:
+      - 80:80
+    depends_on:
+      - db
+    environment:
+      APACHE_SERVER_ADMIN: test@localhost
+      APACHE_DOCUMENT_ROOT: /var/www/html
