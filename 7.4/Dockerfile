@@ -16,6 +16,7 @@ RUN pecl install imagick-3.4.4 \
 COPY php/opcache-recomended.ini /usr/local/etc/php/conf.d/
 COPY php/msmtp.ini /usr/local/etc/php/conf.d/
 COPY php/upload.ini /usr/local/etc/php/conf.d/
+COPY php/mysql.ini /usr/local/etc/php/conf.d/
 COPY apache2/000-default.conf /etc/apache2/sites-available/000-default.conf
 
 RUN mkdir -p /tmp/opcache \
