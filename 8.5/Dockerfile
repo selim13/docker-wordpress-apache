@@ -53,15 +53,11 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
 # NOTE: mbstring, pdo, xml are already enabled by default in php:8.5-apache
 # Starting from php 8.5 opcache is not a module anymore
 
-COPY php/opcache-recomended.ini /usr/local/etc/php/conf.d/
-COPY php/msmtp.ini /usr/local/etc/php/conf.d/
-COPY php/upload.ini /usr/local/etc/php/conf.d/
-COPY php/mysql.ini /usr/local/etc/php/conf.d/
-COPY php/xdebug.ini /usr/local/etc/php/conf.d/
+COPY php/custom.ini /usr/local/etc/php/conf.d/zz-custom.ini
 COPY apache2/000-default.conf /etc/apache2/sites-available/000-default.conf
 
-RUN mkdir -p /tmp/opcache \
-    && chown -R www-data:www-data /tmp/opcache \
+RUN mkdir -p /var/tmp/php/opcache /var/tmp/php/upload /var/tmp/php/session \
+    && chown -R www-data:www-data /var/tmp/php \
     && chown www-data:www-data /var/www/html
 
 RUN curl -sS https://getcomposer.org/installer | \

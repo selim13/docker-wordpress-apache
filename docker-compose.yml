@@ -1,19 +1,73 @@
-services:
-  dbmysql:
-    container_name: 'dbmysql'
-    image: 'mariadb:12.2.2'
-    volumes:
-      - './docker-data/dbmysql:/var/lib/mysql'
-    environment:
-      MARIADB_RANDOM_ROOT_PASSWORD: '1'
+name: "wordpress-apache"
 
-  dtlc.ru:
-    image: 'selim13/wordpress-apache'
-    container_name: 'dtlc.ru'
+services:
+  db:
+    image: mariadb:12.2.2
     volumes:
-      - './docker-data/wordpress:/var/www/html'
-      - './wp-config.php:/var/www/html/wp-config.php'
-    ports:
-      - '80:80'
-    depends_on:
-      - 'dbmysql'
+      - './docker-volumes/mariadb/lib:/var/lib/mysql'
+      - './docker-volumes/mariadb/log:/var/log/mysql'
+    environment:
+      MARIADB_ROOT_PASSWORD: wordpress
+      MARIADB_DATABASE: wordpress
+      MARIADB_USER: wordpress
+      MARIADB_PASSWORD: wordpress
+    command:
+      - "--slow-query-log=1"
+      - "--slow-query-log-file=/var/log/mysql/mariadb-slow.log"
+      - "--long-query-time=1"
+      - "--skip-name-resolve=1"
+      - "--character-set-server=utf8mb4"
+      - "--collation-server=utf8mb4_unicode_ci"
+      - "--default-storage-engine=InnoDB"
+      - "--key-buffer-size=32M"
+      - "--join-buffer-size=2M"
+      - "--transaction-isolation=READ-COMMITTED"
+      - "--innodb-flush-method=O_DIRECT"
+      - "--innodb-flush-log-at-trx-commit=2"
+      - "--innodb-file-per-table=1"
+      - "--innodb-buffer-pool-size=256M"
+
+  wordpress-apache-8.5:
+    build: ./8.5
+    image: wordpress-apache:8.5
+    volumes:
+      - "./docker-volumes/wordpress:/var/www/html"
+      - "./docker-volumes/php/tmp:/var/tmp/php"
+    env_file:
+      - ./wordpress.test.env
+
+  wordpress-apache-8.4:
+    build: ./8.4
+    image: wordpress-apache:8.4
+    volumes:
+      - "./docker-volumes/wordpress:/var/www/html"
+      - "./docker-volumes/php/tmp:/var/tmp/php"
+    env_file:
+      - ./wordpress.test.env
+
+  wordpress-apache-7.4:
+    build: ./7.4
+    image: wordpress-apache:7.4
+    volumes:
+      - "./docker-volumes/wordpress:/var/www/html"
+      - "./docker-volumes/php/tmp:/var/tmp/php"
+    env_file:
+      - ./wordpress.test.env
+
+  wordpress-apache-7.3:
+    build: ./7.3
+    image: wordpress-apache:7.3
+    volumes:
+      - "./docker-volumes/wordpress:/var/www/html"
+      - "./docker-volumes/php/tmp:/var/tmp/php"
+    env_file:
+      - ./wordpress.test.env
+
+  wordpress-apache-7.1:
+    build: ./7.1
+    image: wordpress-apache:7.1
+    volumes:
+      - "./docker-volumes/wordpress:/var/www/html"
+      - "./docker-volumes/php/tmp:/var/tmp/php"
+    env_file:
+      - ./wordpress.test.env
