@@ -1,6 +1,11 @@
 FROM php:8.4-apache
 
-LABEL maintainer="selim013@gmail.com"
+LABEL maintainer="selim013@gmail.com" \
+    org.opencontainers.image.title="wordpress-apache" \
+    org.opencontainers.image.description="WordPress image with Apache, mod_php and wp-cli for PHP 8.4" \
+    org.opencontainers.image.vendor="selim13" \
+    org.opencontainers.image.source="https://github.com/selim13/docker-wordpress-apache" \
+    org.opencontainers.image.url="https://github.com/selim13/docker-wordpress-apache"
 
 ARG WWW_DATA_UID=1000
 ARG WWW_DATA_GID=1000
