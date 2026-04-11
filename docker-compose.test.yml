@@ -1,22 +1,36 @@
-version: "2"
-
-volumes:
-  db-data: {}
-  wp-php7.3-data: {}
+name: "wordpress-apache"
 
 services:
   db:
-    image: mysql:5.7
+    image: mariadb:12.2.2
     volumes:
-      - "db-data:/var/lib/mysql"
+      - "./docker-data/test-db:/var/lib/mysql"
     environment:
-      MYSQL_ROOT_PASSWORD: wordpress
-      MYSQL_DATABASE: wordpress
+      MARIADB_ROOT_PASSWORD: wordpress
+      MARIADB_DATABASE: wordpress
+      MARIADB_USER: wordpress
+      MARIADB_PASSWORD: wordpress
+    command:
+      # - "--sql-mode="
+      - "--slow-query-log=1"
+      - "--slow-query-log-file=/var/log/mysql/mariadb-slow.log"
+      - "--long-query-time=1"
+      - "--skip-name-resolve=1"
+      - "--character-set-server=utf8mb4"
+      - "--collation-server=utf8mb4_unicode_ci"
+      - "--default-storage-engine=InnoDB"
+      - "--key-buffer-size=32M"
+      - "--join-buffer-size=2M"
+      - "--transaction-isolation=READ-COMMITTED"
+      - "--innodb-flush-method=O_DIRECT"
+      - "--innodb-flush-log-at-trx-commit=2"
+      - "--innodb-file-per-table=1"
+      - "--innodb-buffer-pool-size=256M"
       
-  wp-apache-php7.3:
-    build: ./7.3
+  wordpress-apache:
+    build: ./8.5
     volumes:
-      - "wp-php7.3-data:/var/www/html"
+      - "./docker-data/test-wp:/var/www/html"
     ports:
       - 80:80
     depends_on:
@@ -24,3 +38,7 @@ services:
     environment:
       APACHE_SERVER_ADMIN: test@localhost
       APACHE_DOCUMENT_ROOT: /var/www/html
+      PHP_OPCACHE_ENABLE: 0
+      PHP_OPCACHE_ENABLE_CLI: 0
+      PHP_XDEBUG_MODE: debug,develop
+      PHP_XDEBUG_START_WITH_REQUEST: yes

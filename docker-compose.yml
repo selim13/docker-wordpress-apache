@@ -1,24 +1,18 @@
-version: '2'
-
-volumes:
-  dbmysql-data: {}
-  dtlc-data: {}
-
 services:
   dbmysql:
     container_name: 'dbmysql'
-    image: 'mysql:5.7'
+    image: 'mariadb:12.2.2'
     volumes:
-      - 'dbmysql-data:/var/lib/mysql'
+      - './docker-data/dbmysql:/var/lib/mysql'
     environment:
-      MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
+      MARIADB_RANDOM_ROOT_PASSWORD: '1'
 
   dtlc.ru:
     image: 'selim13/wordpress-apache'
     container_name: 'dtlc.ru'
     volumes:
-      - 'dtlc-data:/var/www/html'
-      - '/path/on/server/wp-config.php:/var/www/html/wp-config.php'
+      - './docker-data/wordpress:/var/www/html'
+      - './wp-config.php:/var/www/html/wp-config.php'
     ports:
       - '80:80'
     depends_on:
